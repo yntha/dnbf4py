@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "Serializer/Deserializer for dotnet's BinaryFormatter format."
 readme = "README.md"
 requires-python = ">=3.7"
-license = "MIT"
+license = "GPL-3.0-or-later"
 keywords = []
 authors = [
   { name = "yntha", email = "126660548+yntha@users.noreply.github.com" },
