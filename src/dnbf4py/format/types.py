@@ -87,10 +87,18 @@ class SystemClassWithMembersAndTypesRecord(Record):
     member_type_info: MemberTypeInfo
 
 
+@dataclass
+class ClassWithMembersAndTypesRecord(Record):
+    class_info: ClassInfo
+    member_type_info: MemberTypeInfo
+    library_id: int
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
     SystemClassWithMembersRecord,
     ClassWithMembersRecord,
     SystemClassWithMembersAndTypesRecord,
+    ClassWithMembersAndTypesRecord,
 ]
