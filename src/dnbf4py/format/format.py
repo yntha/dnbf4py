@@ -5,7 +5,7 @@ from typing import Self
 
 from datastream import DeserializingStream, SerializingStream
 
-from dnbf4py.format.types import ClassInfo, Record, RecordTypeEnum, RecordTypes
+from dnbf4py.format.types import ClassInfo, Record, RecordTypeEnum, RecordTypes, MemberTypeInfo
 
 
 class DNBinaryFormat:
@@ -17,6 +17,7 @@ class DNBinaryFormat:
             self.read_class_with_id,
             self.read_system_class_with_members,
             self.read_class_with_members,
+            self.read_system_class_with_members_and_types,
         ]
         self.varint_max_bytes = 5
 
@@ -112,7 +113,7 @@ class DNBinaryFormat:
             record_type=record_type,
             class_info=class_info,
         )
-    
+
     def read_class_with_members(self, record_type: int) -> Record:
         class_info = self.read_class_info()
         library_id = self.stream.read_int32()
@@ -121,4 +122,19 @@ class DNBinaryFormat:
             record_type=record_type,
             class_info=class_info,
             library_id=library_id,
+        )
+
+    def read_system_class_with_members_and_types(self, record_type: int) -> Record:
+        class_info = self.read_class_info()
+        binary_types = [self.stream.read_uint8() for _ in range(class_info.member_count)]
+        additional_infos = [self.stream.read() for _ in range(class_info.member_count)]
+        member_type_info = MemberTypeInfo(
+            binary_types=binary_types,
+            additional_infos=additional_infos,
+        )
+
+        return RecordTypes[RecordTypeEnum.SystemClassWithMembersAndTypes](
+            record_type=record_type,
+            class_info=class_info,
+            member_type_info=member_type_info,
         )
