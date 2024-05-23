@@ -16,6 +16,7 @@ class DNBinaryFormat:
             self.read_serialized_stream_header,
             self.read_class_with_id,
         ]
+        self.varint_max_bytes = 5
 
     @classmethod
     def from_bytes(cls, data: bytes):
@@ -67,3 +68,18 @@ class DNBinaryFormat:
             object_id=object_id,
             metadata_id=metadata_id,
         )
+    def read_varint(self) -> int:
+        result = 0
+        shift = 0
+        shift_amount = 7
+
+        while shift <= (self.varint_max_bytes * (shift_amount - 1)):
+            byte = self.stream.read_uint8()
+
+            result |= (byte & 0x7F) << shift
+            shift += shift_amount
+
+            if byte & 0x80 == 0:
+                break
+        
+        return result
