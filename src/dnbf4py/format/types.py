@@ -94,6 +94,12 @@ class ClassWithMembersAndTypesRecord(Record):
     library_id: int
 
 
+@dataclass
+class BinaryObjectStringRecord(Record):
+    object_id: int
+    value: str
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -101,4 +107,5 @@ RecordTypes: list[Record] = [
     ClassWithMembersRecord,
     SystemClassWithMembersAndTypesRecord,
     ClassWithMembersAndTypesRecord,
+    BinaryObjectStringRecord,
 ]

@@ -26,6 +26,7 @@ class DNBinaryFormat:
             self.read_class_with_members,
             self.read_system_class_with_members_and_types,
             self.read_class_with_members_and_types,
+            self.read_binary_object_string,
         ]
         self.varint_max_bytes = 5
 
@@ -161,4 +162,14 @@ class DNBinaryFormat:
             class_info=class_info,
             member_type_info=member_type_info,
             library_id=library_id,
+        )
+    
+    def read_binary_object_string(self, record_type: int) -> Record:
+        object_id = self.stream.read_int32()
+        value = self.read_length_prefixed_string()
+
+        return RecordTypes[RecordTypeEnum.BinaryObjectString](
+            record_type=record_type,
+            object_id=object_id,
+            value=value,
         )
