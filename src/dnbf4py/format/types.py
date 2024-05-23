@@ -37,6 +37,15 @@ class BinaryTypeEnum(IntEnum):
     PrimitiveArray = 7
 
 
+class BinaryArrayTypeEnum(IntEnum):
+    Single = 0
+    Jagged = 1
+    Rectangular = 2
+    SingleOffset = 3
+    JaggedOffset = 4
+    RectangularOffset = 5
+
+
 @dataclass
 class Record:
     type: RecordTypeEnum
