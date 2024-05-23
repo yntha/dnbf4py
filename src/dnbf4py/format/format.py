@@ -143,8 +143,6 @@ class DNBinaryFormat:
 
     def read_system_class_with_members_and_types(self, record_type: int) -> Record:
         class_info = self.read_class_info()
-        binary_types = [self.stream.read_uint8() for _ in range(class_info.member_count)]
-        additional_infos = [self.stream.read() for _ in range(class_info.member_count)]
         member_type_info = self.read_member_type_info()
 
         return RecordTypes[RecordTypeEnum.SystemClassWithMembersAndTypes](
@@ -156,8 +154,6 @@ class DNBinaryFormat:
     def read_class_with_members_and_types(self, record_type: int) -> Record:
         class_info = self.read_class_info()
         library_id = self.stream.read_int32()
-        binary_types = [self.stream.read_uint8() for _ in range(class_info.member_count)]
-        additional_infos = [self.stream.read() for _ in range(class_info.member_count)]
         member_type_info = self.read_member_type_info()
 
         return RecordTypes[RecordTypeEnum.ClassWithMembersAndTypes](
