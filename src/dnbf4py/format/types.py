@@ -59,6 +59,7 @@ class SystemClassWithMembersRecord(Record):
 
 
 RecordTypes: list[Record] = [
-    SerializationHeaderRecord,,
+    SerializationHeaderRecord,
     ClassWithIdRecord,
+    SystemClassWithMembersRecord,
 ]
