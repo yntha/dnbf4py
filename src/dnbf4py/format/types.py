@@ -92,4 +92,5 @@ RecordTypes: list[Record] = [
     ClassWithIdRecord,
     SystemClassWithMembersRecord,
     ClassWithMembersRecord,
+    SystemClassWithMembersAndTypesRecord,
 ]
