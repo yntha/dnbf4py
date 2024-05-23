@@ -11,7 +11,7 @@ class Record:
 
 
 @dataclass
-class SerializationHeaderRecord:
+class SerializationHeaderRecord(Record):
     root_id: int
     header_id: int
     major_version: int
