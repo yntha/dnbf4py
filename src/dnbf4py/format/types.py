@@ -39,6 +39,12 @@ class SerializationHeaderRecord(Record):
     minor_version: int
 
 
+@dataclass
+class ClassWithIdRecord(Record):
+    object_id: int
+    metadata_id: str
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
 ]
