@@ -53,6 +53,11 @@ class ClassInfo:
     member_names: list[str]
 
 
+@dataclass
+class SystemClassWithMembersRecord(Record):
+    class_info: ClassInfo
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,,
     ClassWithIdRecord,
