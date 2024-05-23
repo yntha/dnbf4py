@@ -75,6 +75,12 @@ class ClassWithMembersRecord(Record):
     library_id: int
 
 
+@dataclass
+class MemberTypeInfo:
+    binary_types: list[BinaryTypeEnum]
+    additional_infos: list[Any]
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
