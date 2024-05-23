@@ -46,5 +46,6 @@ class ClassWithIdRecord(Record):
 
 
 RecordTypes: list[Record] = [
-    SerializationHeaderRecord,
+    SerializationHeaderRecord,,
+    ClassWithIdRecord,
 ]
