@@ -18,4 +18,4 @@ pip install dnbf4py
 
 ## License
 
-`dnbf4py` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+`dnbf4py` is distributed under the terms of the [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html) license.
