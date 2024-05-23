@@ -30,7 +30,7 @@ class DNBinaryFormat:
         while True:
             record_type = RecordTypeEnum(self.stream.read_uint8())
 
-            yield self.parsers[record_type]()
+            yield self.parsers[record_type](record_type)
 
     def read(self):
         record = next(self.read_record())
@@ -43,13 +43,14 @@ class DNBinaryFormat:
         self.header_record = record
     
 
-    def read_serialized_stream_header(self) -> Record:
+    def read_serialized_stream_header(self, record_type: int) -> Record:
         root_id = self.stream.read_int32()
         header_id = self.stream.read_int32()
         major_version = self.stream.read_int32()
         minor_version = self.stream.read_int32()
 
         return RecordTypes[RecordTypeEnum.SerializedStreamHeader](
+            record_type=record_type,
             root_id=root_id,
             header_id=header_id,
             major_version=major_version,
