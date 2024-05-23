@@ -15,6 +15,7 @@ class DNBinaryFormat:
         self.parsers = [
             self.read_serialized_stream_header,
             self.read_class_with_id,
+            self.read_system_class_with_members,
         ]
         self.varint_max_bytes = 5
 
@@ -43,7 +44,6 @@ class DNBinaryFormat:
             raise ValueError(msg)
 
         self.header_record = record
-    
 
     def read_serialized_stream_header(self, record_type: int) -> Record:
         root_id = self.stream.read_int32()
@@ -58,7 +58,7 @@ class DNBinaryFormat:
             major_version=major_version,
             minor_version=minor_version,
         )
-    
+
     def read_class_with_id(self, record_type: int) -> Record:
         object_id = self.stream.read_int32()
         metadata_id = self.stream.read_string()
@@ -68,6 +68,7 @@ class DNBinaryFormat:
             object_id=object_id,
             metadata_id=metadata_id,
         )
+
     def read_varint(self) -> int:
         result = 0
         shift = 0
@@ -81,16 +82,15 @@ class DNBinaryFormat:
 
             if byte & 0x80 == 0:
                 break
-        
+
         return result
-    
+
     def read_length_prefixed_string(self) -> str:
         length = self.read_varint()
         string_data = self.stream.read(length)
 
         return string_data.decode("utf-8")
-        
-    
+
     def read_class_info(self) -> ClassInfo:
         object_id = self.stream.read_int32()
         name = self.read_length_prefixed_string()
@@ -103,4 +103,11 @@ class DNBinaryFormat:
             member_count=member_count,
             member_names=member_names,
         )
-    
+
+    def read_system_class_with_members(self, record_type: int) -> Record:
+        class_info = self.read_class_info()
+
+        return RecordTypes[RecordTypeEnum.SystemClassWithMembers](
+            record_type=record_type,
+            class_info=class_info,
+        )
