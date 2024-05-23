@@ -81,6 +81,12 @@ class MemberTypeInfo:
     additional_infos: list[Any]
 
 
+@dataclass
+class SystemClassWithMembersAndTypesRecord(Record):
+    class_info: ClassInfo
+    member_type_info: MemberTypeInfo
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
