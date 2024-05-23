@@ -34,6 +34,7 @@ class RecordTypeEnum(IntEnum):
 class DNBinaryFormat:
     def __init__(self, stream: DeserializingStream):
         self.stream = stream
+        self.header_record = None
 
     @classmethod
     def from_bytes(cls, data: bytes):
@@ -50,3 +51,13 @@ class DNBinaryFormat:
             record_type = RecordTypeEnum(self.stream.read_uint8())
 
             yield RecordTypes[record_type]
+
+    def read(self):
+        record = next(self.read_record())
+
+        if record.type != RecordTypeEnum.SerializedStreamHeader:
+            msg = "Expected SerializedStreamHeader record"
+
+            raise ValueError(msg)
+
+        self.header_record = record
