@@ -1,8 +1,11 @@
+from collections.abc import Generator
 from enum import IntEnum
 from pathlib import Path
-from typing import *
+from typing import Self
 
 from datastream import DeserializingStream, SerializingStream
+
+from dnbf4py.format.types import Record, RecordTypes
 
 
 class RecordTypeEnum(IntEnum):
@@ -41,3 +44,9 @@ class DNBinaryFormat:
         path = Path(path)
 
         return cls(DeserializingStream(path.read_bytes()))
+
+    def read_record(self) -> Generator[Record, None, None]:
+        while True:
+            record_type = RecordTypeEnum(self.stream.read_uint8())
+
+            yield RecordTypes[record_type]
