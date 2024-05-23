@@ -39,6 +39,6 @@ class SerializationHeaderRecord(Record):
     minor_version: int
 
 
-RecordTypes = [
+RecordTypes: list[Record] = [
     SerializationHeaderRecord,
 ]
