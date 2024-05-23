@@ -12,6 +12,9 @@ class DNBinaryFormat:
     def __init__(self, stream: DeserializingStream):
         self.stream = stream
         self.header_record = None
+        self.parsers = [
+            self.read_serialized_stream_header,
+        ]
 
     @classmethod
     def from_bytes(cls, data: bytes):
@@ -27,7 +30,7 @@ class DNBinaryFormat:
         while True:
             record_type = RecordTypeEnum(self.stream.read_uint8())
 
-            yield RecordTypes[record_type]
+            yield self.parsers[record_type]()
 
     def read(self):
         record = next(self.read_record())
