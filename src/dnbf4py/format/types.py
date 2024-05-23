@@ -26,6 +26,17 @@ class RecordTypeEnum(IntEnum):
     MethodReturn = 22
 
 
+class BinaryTypeEnum(IntEnum):
+    Primitive = 0
+    String = 1
+    Object = 2
+    SystemClass = 3
+    Class = 4
+    ObjectArray = 5
+    StringArray = 6
+    PrimitiveArray = 7
+
+
 @dataclass
 class Record:
     type: RecordTypeEnum
