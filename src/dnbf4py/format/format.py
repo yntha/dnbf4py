@@ -5,7 +5,7 @@ from typing import Self
 
 from datastream import DeserializingStream, SerializingStream
 
-from dnbf4py.format.types import Record, RecordTypeEnum, RecordTypes
+from dnbf4py.format.types import ClassInfo, Record, RecordTypeEnum, RecordTypes
 
 
 class DNBinaryFormat:
@@ -90,4 +90,17 @@ class DNBinaryFormat:
 
         return string_data.decode("utf-8")
         
+    
+    def read_class_info(self) -> ClassInfo:
+        object_id = self.stream.read_int32()
+        name = self.read_length_prefixed_string()
+        member_count = self.stream.read_int32()
+        member_names = [self.read_length_prefixed_string() for _ in range(member_count)]
+
+        return ClassInfo(
+            object_id=object_id,
+            name=name,
+            member_count=member_count,
+            member_names=member_names,
+        )
     
