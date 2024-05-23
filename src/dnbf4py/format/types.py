@@ -45,6 +45,14 @@ class ClassWithIdRecord(Record):
     metadata_id: str
 
 
+@dataclass
+class ClassInfo:
+    object_id: int
+    name: str
+    member_count: int
+    member_names: list[str]
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,,
     ClassWithIdRecord,
