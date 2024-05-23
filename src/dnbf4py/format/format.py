@@ -14,6 +14,7 @@ class DNBinaryFormat:
         self.header_record = None
         self.parsers = [
             self.read_serialized_stream_header,
+            self.read_class_with_id,
         ]
 
     @classmethod
@@ -55,4 +56,14 @@ class DNBinaryFormat:
             header_id=header_id,
             major_version=major_version,
             minor_version=minor_version,
+        )
+    
+    def read_class_with_id(self, record_type: int) -> Record:
+        object_id = self.stream.read_int32()
+        metadata_id = self.stream.read_string()
+
+        return RecordTypes[RecordTypeEnum.ClassWithId](
+            record_type=record_type,
+            object_id=object_id,
+            metadata_id=metadata_id,
         )
