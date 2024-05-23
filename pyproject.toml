@@ -23,9 +23,9 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/unknown/dnbf4py#readme"
-Issues = "https://github.com/unknown/dnbf4py/issues"
-Source = "https://github.com/unknown/dnbf4py"
+Documentation = "https://github.com/yntha/dnbf4py#readme"
+Issues = "https://github.com/yntha/dnbf4py/issues"
+Source = "https://github.com/yntha/dnbf4py"
 
 [tool.hatch.version]
 path = "src/dnbf4py/__about__.py"
