@@ -83,3 +83,11 @@ class DNBinaryFormat:
                 break
         
         return result
+    
+    def read_length_prefixed_string(self) -> str:
+        length = self.read_varint()
+        string_data = self.stream.read(length)
+
+        return string_data.decode("utf-8")
+        
+    
