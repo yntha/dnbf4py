@@ -47,6 +47,7 @@ class DNBinaryFormat:
             self.read_array_single_object,
             self.read_array_single_string,
             self.read_binary_method_call,
+            self.read_binary_method_return,
         ]
         self.varint_max_bytes = 5
 
@@ -367,6 +368,20 @@ class DNBinaryFormat:
             message_flags=message_flags,
             method_name=method_name,
             type_name=type_name,
+            call_context=call_context,
+            args=args,
+        )
+    
+    def read_binary_method_return(self, record_type: int) -> Record:
+        message_flags = MessageFlags(self.stream.read_uint8())
+        return_value = self.read_value_with_code()
+        call_context = self.read_string_value_with_code()
+        args = self.read_array_of_value_with_code()
+
+        return RecordTypes[RecordTypeEnum.BinaryMethodReturn](
+            record_type=record_type,
+            message_flags=message_flags,
+            return_value=return_value,
             call_context=call_context,
             args=args,
         )

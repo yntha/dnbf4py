@@ -253,6 +253,14 @@ class BinaryMethodCallRecord(Record):
     args: ArrayOfValueWithCode
 
 
+@dataclass
+class BinaryMethodReturnRecord(Record):
+    message_flags: MessageFlags
+    return_value: ValueWithCode
+    call_context: StringValueWithCode
+    args: ArrayOfValueWithCode
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -273,4 +281,5 @@ RecordTypes: list[Record] = [
     ArraySingleObjectRecord,
     ArraySingleStringRecord,
     BinaryMethodCallRecord,
+    BinaryMethodReturnRecord,
 ]
