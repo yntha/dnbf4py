@@ -190,6 +190,14 @@ class ArrayInfo:
     length: int
 
 
+@dataclass
+class ArraySinglePrimitiveRecord(Record):
+    array_info: ArrayInfo
+    binary_array_type: BinaryArrayTypeEnum
+    type: PrimitiveTypeEnum
+    # todo: values
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -206,4 +214,5 @@ RecordTypes: list[Record] = [
     BinaryLibraryRecord,
     ObjectNullMultiple256Record,
     ObjectNullMultipleRecord,
+    ArraySinglePrimitiveRecord,
 ]

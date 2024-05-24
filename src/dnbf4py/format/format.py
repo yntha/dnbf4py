@@ -6,15 +6,16 @@ from typing import Self
 from datastream import DeserializingStream, SerializingStream
 
 from dnbf4py.format.types import (
+    ArrayInfo,
     BinaryArrayTypeEnum,
     BinaryTypeEnum,
     ClassInfo,
+    ClassTypeInfo,
     MemberTypeInfo,
     PrimitiveTypeEnum,
     Record,
     RecordTypeEnum,
     RecordTypes,
-    ClassTypeInfo,
 )
 
 
@@ -277,4 +278,25 @@ class DNBinaryFormat:
         return RecordTypes[RecordTypeEnum.ObjectNullMultiple](
             record_type=record_type,
             null_count=null_count,
+        )
+    
+    def read_array_info(self) -> ArrayInfo:
+        object_id = self.stream.read_int32()
+        length = self.stream.read_int32()
+
+        return ArrayInfo(
+            object_id=object_id,
+            length=length,
+        )
+    
+    def read_array_single_primitive(self, record_type: int) -> Record:
+        array_info = self.read_array_info()
+        binary_array_type = BinaryArrayTypeEnum(self.stream.read_uint8())
+        type_enum = PrimitiveTypeEnum(self.stream.read_uint8())
+
+        return RecordTypes[RecordTypeEnum.ArraySinglePrimitive](
+            record_type=record_type,
+            array_info=array_info,
+            binary_array_type=binary_array_type,
+            type=type_enum,
         )
