@@ -31,6 +31,7 @@ class DNBinaryFormat:
             self.read_class_with_members_and_types,
             self.read_binary_object_string,
             self.read_binary_array,
+            self.read_member_primitive_typed,
         ]
         self.varint_max_bytes = 5
 
@@ -216,4 +217,14 @@ class DNBinaryFormat:
             lower_bounds=lower_bounds,
             type=type_enum,
             additional_type_info=type_info,
+        )
+    
+    def read_member_primitive_typed(self, record_type: int) -> Record:
+        primitive_type = PrimitiveTypeEnum(self.stream.read_uint8())
+        value = self.stream.read()  # TODO: read based on primitive type
+
+        return RecordTypes[RecordTypeEnum.MemberPrimitiveTyped](
+            record_type=record_type,
+            primitive_type=primitive_type,
+            value=value,
         )

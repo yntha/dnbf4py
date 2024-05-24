@@ -147,6 +147,12 @@ class BinaryArrayRecord(Record):
     additional_type_info: Any
 
 
+@dataclass
+class MemberPrimitiveTypedRecord(Record):
+    primitive_type: PrimitiveTypeEnum
+    value: Any
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -156,4 +162,5 @@ RecordTypes: list[Record] = [
     ClassWithMembersAndTypesRecord,
     BinaryObjectStringRecord,
     BinaryArrayRecord,
+    MemberPrimitiveTypedRecord,
 ]
