@@ -6,12 +6,15 @@ from typing import Self
 from datastream import DeserializingStream, SerializingStream
 
 from dnbf4py.format.types import (
+    BinaryArrayTypeEnum,
+    BinaryTypeEnum,
     ClassInfo,
-    ClassWithMembersAndTypesRecord,
     MemberTypeInfo,
+    PrimitiveTypeEnum,
     Record,
     RecordTypeEnum,
     RecordTypes,
+    ClassTypeInfo
 )
 
 
@@ -27,6 +30,7 @@ class DNBinaryFormat:
             self.read_system_class_with_members_and_types,
             self.read_class_with_members_and_types,
             self.read_binary_object_string,
+            self.read_binary_array,
         ]
         self.varint_max_bytes = 5
 
@@ -172,4 +176,44 @@ class DNBinaryFormat:
             record_type=record_type,
             object_id=object_id,
             value=value,
+        )
+    
+    def read_class_type_info(self) -> ClassTypeInfo:
+        type_name = self.read_length_prefixed_string()
+        library_id = self.stream.read_int32()
+
+        return ClassTypeInfo(
+            type_name=type_name,
+            library_id=library_id,
+        )
+    
+    def read_binary_array(self, record_type: int) -> Record:
+        object_id = self.stream.read_int32()
+        binary_array_type = BinaryArrayTypeEnum(self.stream.read_uint8())
+        rank = self.stream.read_int32()
+        lengths = [self.stream.read_int32() for _ in range(rank)]
+        lower_bounds = [self.stream.read_int32() for _ in range(rank)]
+        type_enum = BinaryTypeEnum(self.stream.read_uint8())
+        type_info = None
+        
+        if type_enum == BinaryTypeEnum.Primitive:
+            type_info = PrimitiveTypeEnum(self.stream.read_uint8())
+        elif type_enum == BinaryTypeEnum.PrimitiveArray:
+            type_info = PrimitiveTypeEnum(self.stream.read_uint8())
+        elif type_enum == BinaryTypeEnum.SystemClass:
+            type_info = self.read_length_prefixed_string()  # should be class name
+        elif type_enum == BinaryTypeEnum.Class:
+            type_info = self.read_class_type_info()
+        else:
+            raise ValueError("Invalid BinaryTypeEnum")
+        
+        return RecordTypes[RecordTypeEnum.BinaryArray](
+            record_type=record_type,
+            object_id=object_id,
+            binary_array_type=binary_array_type,
+            rank=rank,
+            lengths=lengths,
+            lower_bounds=lower_bounds,
+            type=type_enum,
+            additional_type_info=type_info,
         )

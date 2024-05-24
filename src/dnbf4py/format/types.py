@@ -130,9 +130,21 @@ class ClassTypeInfo:
     library_id: int
 
 
+@dataclass
 class BinaryObjectStringRecord(Record):
     object_id: int
     value: str
+
+
+@dataclass
+class BinaryArrayRecord(Record):
+    object_id: int
+    binary_array_type: BinaryArrayTypeEnum
+    rank: int
+    lengths: list[int]
+    lower_bounds: list[int]
+    type: BinaryTypeEnum
+    additional_type_info: Any
 
 
 RecordTypes: list[Record] = [
@@ -143,4 +155,5 @@ RecordTypes: list[Record] = [
     SystemClassWithMembersAndTypesRecord,
     ClassWithMembersAndTypesRecord,
     BinaryObjectStringRecord,
+    BinaryArrayRecord,
 ]
