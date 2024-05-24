@@ -198,6 +198,12 @@ class ArraySinglePrimitiveRecord(Record):
     # todo: values
 
 
+@dataclass
+class ArraySingleObjectRecord(Record):
+    array_info: ArrayInfo
+
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -215,4 +221,5 @@ RecordTypes: list[Record] = [
     ObjectNullMultiple256Record,
     ObjectNullMultipleRecord,
     ArraySinglePrimitiveRecord,
+    ArraySingleObjectRecord,
 ]
