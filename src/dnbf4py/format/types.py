@@ -163,6 +163,11 @@ class ObjectNullRecord(Record):
     pass
 
 
+@dataclass
+class MessageEndRecord(Record):
+    pass
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -175,4 +180,5 @@ RecordTypes: list[Record] = [
     MemberPrimitiveTypedRecord,
     MemberReferenceRecord,
     ObjectNullRecord,
+    MessageEndRecord,
 ]
