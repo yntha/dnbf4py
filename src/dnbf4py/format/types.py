@@ -261,6 +261,11 @@ class BinaryMethodReturnRecord(Record):
     args: ArrayOfValueWithCode
 
 
+@dataclass
+class MemberPrimitiveUnTyped:
+    value: Any
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
