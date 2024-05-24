@@ -125,6 +125,11 @@ class ClassWithMembersAndTypesRecord(Record):
 
 
 @dataclass
+class ClassTypeInfo:
+    type_name: str
+    library_id: int
+
+
 class BinaryObjectStringRecord(Record):
     object_id: int
     value: str
