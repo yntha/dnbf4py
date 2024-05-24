@@ -14,7 +14,7 @@ from dnbf4py.format.types import (
     Record,
     RecordTypeEnum,
     RecordTypes,
-    ClassTypeInfo
+    ClassTypeInfo,
 )
 
 
@@ -136,7 +136,7 @@ class DNBinaryFormat:
             class_info=class_info,
             library_id=library_id,
         )
-    
+
     def read_member_type_info(self) -> MemberTypeInfo:
         binary_types = [self.stream.read_uint8() for _ in range(class_info.member_count)]
         additional_infos = [self.stream.read() for _ in range(class_info.member_count)]
@@ -155,7 +155,7 @@ class DNBinaryFormat:
             class_info=class_info,
             member_type_info=member_type_info,
         )
-    
+
     def read_class_with_members_and_types(self, record_type: int) -> Record:
         class_info = self.read_class_info()
         library_id = self.stream.read_int32()
@@ -167,7 +167,7 @@ class DNBinaryFormat:
             member_type_info=member_type_info,
             library_id=library_id,
         )
-    
+
     def read_binary_object_string(self, record_type: int) -> Record:
         object_id = self.stream.read_int32()
         value = self.read_length_prefixed_string()
@@ -177,7 +177,7 @@ class DNBinaryFormat:
             object_id=object_id,
             value=value,
         )
-    
+
     def read_class_type_info(self) -> ClassTypeInfo:
         type_name = self.read_length_prefixed_string()
         library_id = self.stream.read_int32()
@@ -186,7 +186,7 @@ class DNBinaryFormat:
             type_name=type_name,
             library_id=library_id,
         )
-    
+
     def read_binary_array(self, record_type: int) -> Record:
         object_id = self.stream.read_int32()
         binary_array_type = BinaryArrayTypeEnum(self.stream.read_uint8())
@@ -195,7 +195,7 @@ class DNBinaryFormat:
         lower_bounds = [self.stream.read_int32() for _ in range(rank)]
         type_enum = BinaryTypeEnum(self.stream.read_uint8())
         type_info = None
-        
+
         if type_enum == BinaryTypeEnum.Primitive:
             type_info = PrimitiveTypeEnum(self.stream.read_uint8())
         elif type_enum == BinaryTypeEnum.PrimitiveArray:
@@ -206,7 +206,7 @@ class DNBinaryFormat:
             type_info = self.read_class_type_info()
         else:
             raise ValueError("Invalid BinaryTypeEnum")
-        
+
         return RecordTypes[RecordTypeEnum.BinaryArray](
             record_type=record_type,
             object_id=object_id,
