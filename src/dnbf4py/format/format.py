@@ -1,9 +1,8 @@
 from collections.abc import Generator
-from enum import IntEnum
 from pathlib import Path
 from typing import Self
 
-from datastream import DeserializingStream, SerializingStream
+from datastream import DeserializingStream
 
 from dnbf4py.format.types import (
     ArrayInfo,
@@ -53,11 +52,11 @@ class DNBinaryFormat:
         self.varint_max_bytes = 5
 
     @classmethod
-    def from_bytes(cls, data: bytes):
+    def from_bytes(cls, data: bytes) -> Self:
         return cls(DeserializingStream(data))
 
     @classmethod
-    def from_file(cls, path: str | Path):
+    def from_file(cls, path: str | Path) -> Self:
         path = Path(path)
 
         return cls(DeserializingStream(path.read_bytes()))
