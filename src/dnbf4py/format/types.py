@@ -242,6 +242,17 @@ class ValueWithCode:
 class ArrayOfValueWithCode:
     length: int
     values: list[ValueWithCode]
+
+
+@dataclass
+class BinaryMethodCallRecord(Record):
+    message_flags: MessageFlags
+    method_name: StringValueWithCode
+    type_name: StringValueWithCode
+    call_context: StringValueWithCode
+    args: ArrayOfValueWithCode
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -261,4 +272,5 @@ RecordTypes: list[Record] = [
     ArraySinglePrimitiveRecord,
     ArraySingleObjectRecord,
     ArraySingleStringRecord,
+    BinaryMethodCallRecord,
 ]

@@ -7,15 +7,19 @@ from datastream import DeserializingStream, SerializingStream
 
 from dnbf4py.format.types import (
     ArrayInfo,
+    ArrayOfValueWithCode,
     BinaryArrayTypeEnum,
     BinaryTypeEnum,
     ClassInfo,
     ClassTypeInfo,
     MemberTypeInfo,
+    MessageFlags,
     PrimitiveTypeEnum,
     Record,
     RecordTypeEnum,
     RecordTypes,
+    StringValueWithCode,
+    ValueWithCode,
 )
 
 
@@ -42,6 +46,7 @@ class DNBinaryFormat:
             self.read_array_single_primitive,
             self.read_array_single_object,
             self.read_array_single_string,
+            self.read_binary_method_call,
         ]
         self.varint_max_bytes = 5
 
@@ -228,7 +233,7 @@ class DNBinaryFormat:
             type=type_enum,
             additional_type_info=type_info,
         )
-    
+
     def read_member_primitive_typed(self, record_type: int) -> Record:
         primitive_type = PrimitiveTypeEnum(self.stream.read_uint8())
         value = self.stream.read()  # TODO: read based on primitive type
@@ -238,7 +243,7 @@ class DNBinaryFormat:
             primitive_type=primitive_type,
             value=value,
         )
-    
+
     def read_member_reference(self, record_type: int) -> Record:
         id_ref = self.stream.read_int32()
 
@@ -246,17 +251,17 @@ class DNBinaryFormat:
             record_type=record_type,
             id_ref=id_ref,
         )
-    
+
     def read_object_null(self, record_type: int) -> Record:
         return RecordTypes[RecordTypeEnum.ObjectNull](
             record_type=record_type,
         )
-    
+
     def read_message_end(self, record_type: int) -> Record:
         return RecordTypes[RecordTypeEnum.MessageEnd](
             record_type=record_type,
         )
-    
+
     def read_binary_library(self, record_type: int) -> Record:
         library_id = self.stream.read_int32()
         library_name = self.read_length_prefixed_string()
@@ -266,7 +271,7 @@ class DNBinaryFormat:
             library_id=library_id,
             library_name=library_name,
         )
-    
+
     def read_object_null_multiple_256(self, record_type: int) -> Record:
         null_count = self.stream.read_uint8()
 
@@ -274,7 +279,7 @@ class DNBinaryFormat:
             record_type=record_type,
             null_count=null_count,
         )
-    
+
     def read_object_null_multiple(self, record_type: int) -> Record:
         null_count = self.stream.read_int32()
 
@@ -282,7 +287,7 @@ class DNBinaryFormat:
             record_type=record_type,
             null_count=null_count,
         )
-    
+
     def read_array_info(self) -> ArrayInfo:
         object_id = self.stream.read_int32()
         length = self.stream.read_int32()
@@ -291,7 +296,7 @@ class DNBinaryFormat:
             object_id=object_id,
             length=length,
         )
-    
+
     def read_array_single_primitive(self, record_type: int) -> Record:
         array_info = self.read_array_info()
         binary_array_type = BinaryArrayTypeEnum(self.stream.read_uint8())
@@ -303,7 +308,7 @@ class DNBinaryFormat:
             binary_array_type=binary_array_type,
             type=type_enum,
         )
-    
+
     def read_array_single_object(self, record_type: int) -> Record:
         array_info = self.read_array_info()
 
@@ -311,11 +316,57 @@ class DNBinaryFormat:
             record_type=record_type,
             array_info=array_info,
         )
-    
+
     def read_array_single_string(self, record_type: int) -> Record:
         array_info = self.read_array_info()
 
         return RecordTypes[RecordTypeEnum.ArraySingleString](
             record_type=record_type,
             array_info=array_info,
+        )
+    
+    def read_string_value_with_code(self) -> StringValueWithCode:
+        primitive_type = PrimitiveTypeEnum(self.stream.read_uint8())
+        string_value = self.stream.read_string()
+
+        if primitive_type != PrimitiveTypeEnum.String:
+            raise ValueError("Expected PrimitiveTypeEnum.String")
+
+        return StringValueWithCode(
+            primitive_type=primitive_type,
+            string_value=string_value,
+        )
+    
+    def read_value_with_code(self) -> ValueWithCode:
+        primitive_type = PrimitiveTypeEnum(self.stream.read_uint8())
+        value = self.stream.read()  # todo: read based on primitive type
+
+        return ValueWithCode(
+            primitive_type=primitive_type,
+            value=value,
+        )
+    
+    def read_array_of_value_with_code(self) -> ArrayOfValueWithCode:
+        length = self.stream.read_int32()
+        values = [self.read_value_with_code() for _ in range(length)]
+
+        return ArrayOfValueWithCode(
+            length=length,
+            values=values,
+        )
+    
+    def read_binary_method_call(self, record_type: int) -> Record:
+        message_flags = MessageFlags(self.stream.read_uint8())
+        method_name = self.read_string_value_with_code()
+        type_name = self.read_string_value_with_code()
+        call_context = self.read_string_value_with_code()
+        args = self.read_array_of_value_with_code()
+
+        return RecordTypes[RecordTypeEnum.BinaryMethodCall](
+            record_type=record_type,
+            message_flags=message_flags,
+            method_name=method_name,
+            type_name=type_name,
+            call_context=call_context,
+            args=args,
         )
