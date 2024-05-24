@@ -33,6 +33,7 @@ class DNBinaryFormat:
             self.read_binary_array,
             self.read_member_primitive_typed,
             self.read_member_reference,
+            self.read_object_null,
         ]
         self.varint_max_bytes = 5
 
@@ -236,4 +237,9 @@ class DNBinaryFormat:
         return RecordTypes[RecordTypeEnum.MemberReference](
             record_type=record_type,
             id_ref=id_ref,
+        )
+    
+    def read_object_null(self, record_type: int) -> Record:
+        return RecordTypes[RecordTypeEnum.ObjectNull](
+            record_type=record_type,
         )

@@ -158,6 +158,11 @@ class MemberReferenceRecord(Record):
     id_ref: int
 
 
+@dataclass
+class ObjectNullRecord(Record):
+    pass
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -168,5 +173,6 @@ RecordTypes: list[Record] = [
     BinaryObjectStringRecord,
     BinaryArrayRecord,
     MemberPrimitiveTypedRecord,
-    MemberReferenceRecord
+    MemberReferenceRecord,
+    ObjectNullRecord,
 ]
