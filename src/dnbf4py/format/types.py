@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import IntEnum, IntFlag
-from typing import Any
+from typing import Any, Type
 
 
 class RecordTypeEnum(IntEnum):
@@ -266,7 +266,7 @@ class MemberPrimitiveUnTyped:
     value: Any
 
 
-RecordTypes: list[Record] = [
+RecordTypes: list[type[Record]] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
     SystemClassWithMembersRecord,
