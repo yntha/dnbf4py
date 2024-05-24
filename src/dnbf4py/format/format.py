@@ -41,6 +41,7 @@ class DNBinaryFormat:
             self.read_object_null_multiple,
             self.read_array_single_primitive,
             self.read_array_single_object,
+            self.read_array_single_string,
         ]
         self.varint_max_bytes = 5
 
@@ -307,6 +308,14 @@ class DNBinaryFormat:
         array_info = self.read_array_info()
 
         return RecordTypes[RecordTypeEnum.ArraySingleObject](
+            record_type=record_type,
+            array_info=array_info,
+        )
+    
+    def read_array_single_string(self, record_type: int) -> Record:
+        array_info = self.read_array_info()
+
+        return RecordTypes[RecordTypeEnum.ArraySingleString](
             record_type=record_type,
             array_info=array_info,
         )

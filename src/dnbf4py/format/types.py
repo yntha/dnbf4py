@@ -203,6 +203,10 @@ class ArraySingleObjectRecord(Record):
     array_info: ArrayInfo
 
 
+@dataclass
+class ArraySingleStringRecord(Record):
+    array_info: ArrayInfo
+
 
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
@@ -222,4 +226,5 @@ RecordTypes: list[Record] = [
     ObjectNullMultipleRecord,
     ArraySinglePrimitiveRecord,
     ArraySingleObjectRecord,
+    ArraySingleStringRecord,
 ]
