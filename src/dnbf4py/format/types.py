@@ -230,6 +230,12 @@ class ArraySingleStringRecord(Record):
 class StringValueWithCode:
     primitive_type: PrimitiveTypeEnum
     string_value: str
+
+
+@dataclass
+class ValueWithCode:
+    primitive_type: PrimitiveTypeEnum
+    value: Any
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
