@@ -184,6 +184,12 @@ class ObjectNullMultipleRecord(Record):
     null_count: int
 
 
+@dataclass
+class ArrayInfo:
+    object_id: int
+    length: int
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
