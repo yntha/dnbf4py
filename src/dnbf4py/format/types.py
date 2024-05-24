@@ -153,6 +153,11 @@ class MemberPrimitiveTypedRecord(Record):
     value: Any
 
 
+@dataclass
+class MemberReferenceRecord(Record):
+    id_ref: int
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -163,4 +168,5 @@ RecordTypes: list[Record] = [
     BinaryObjectStringRecord,
     BinaryArrayRecord,
     MemberPrimitiveTypedRecord,
+    MemberReferenceRecord
 ]
