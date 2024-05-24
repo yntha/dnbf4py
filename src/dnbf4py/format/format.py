@@ -12,6 +12,7 @@ from dnbf4py.format.types import (
     BinaryTypeEnum,
     ClassInfo,
     ClassTypeInfo,
+    MemberPrimitiveUnTyped,
     MemberTypeInfo,
     MessageFlags,
     PrimitiveTypeEnum,
@@ -384,4 +385,11 @@ class DNBinaryFormat:
             return_value=return_value,
             call_context=call_context,
             args=args,
+        )
+    
+    def read_member_primitive_untyped(self) -> MemberPrimitiveUnTyped:
+        value = self.stream.read()
+
+        return MemberPrimitiveUnTyped(
+            value=value,
         )
