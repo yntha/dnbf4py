@@ -35,6 +35,7 @@ class DNBinaryFormat:
             self.read_member_reference,
             self.read_object_null,
             self.read_message_end,
+            self.read_binary_library,
         ]
         self.varint_max_bytes = 5
 
@@ -248,4 +249,14 @@ class DNBinaryFormat:
     def read_message_end(self, record_type: int) -> Record:
         return RecordTypes[RecordTypeEnum.MessageEnd](
             record_type=record_type,
+        )
+    
+    def read_binary_library(self, record_type: int) -> Record:
+        library_id = self.stream.read_int32()
+        library_name = self.read_length_prefixed_string()
+
+        return RecordTypes[RecordTypeEnum.BinaryLibrary](
+            record_type=record_type,
+            library_id=library_id,
+            library_name=library_name,
         )

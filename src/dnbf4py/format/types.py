@@ -168,6 +168,12 @@ class MessageEndRecord(Record):
     pass
 
 
+@dataclass
+class BinaryLibraryRecord(Record):
+    library_id: int
+    library_name: str
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -181,4 +187,5 @@ RecordTypes: list[Record] = [
     MemberReferenceRecord,
     ObjectNullRecord,
     MessageEndRecord,
+    BinaryLibraryRecord,
 ]
