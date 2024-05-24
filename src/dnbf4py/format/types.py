@@ -236,6 +236,12 @@ class StringValueWithCode:
 class ValueWithCode:
     primitive_type: PrimitiveTypeEnum
     value: Any
+
+
+@dataclass
+class ArrayOfValueWithCode:
+    length: int
+    values: list[ValueWithCode]
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
