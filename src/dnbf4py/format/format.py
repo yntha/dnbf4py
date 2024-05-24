@@ -36,6 +36,8 @@ class DNBinaryFormat:
             self.read_object_null,
             self.read_message_end,
             self.read_binary_library,
+            self.read_object_null_multiple_256,
+            self.read_object_null_multiple,
         ]
         self.varint_max_bytes = 5
 
@@ -259,4 +261,20 @@ class DNBinaryFormat:
             record_type=record_type,
             library_id=library_id,
             library_name=library_name,
+        )
+    
+    def read_object_null_multiple_256(self, record_type: int) -> Record:
+        null_count = self.stream.read_uint8()
+
+        return RecordTypes[RecordTypeEnum.ObjectNullMultiple256](
+            record_type=record_type,
+            null_count=null_count,
+        )
+    
+    def read_object_null_multiple(self, record_type: int) -> Record:
+        null_count = self.stream.read_int32()
+
+        return RecordTypes[RecordTypeEnum.ObjectNullMultiple](
+            record_type=record_type,
+            null_count=null_count,
         )

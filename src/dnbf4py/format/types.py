@@ -174,6 +174,16 @@ class BinaryLibraryRecord(Record):
     library_name: str
 
 
+@dataclass
+class ObjectNullMultiple256Record(Record):
+    null_count: int
+
+
+@dataclass
+class ObjectNullMultipleRecord(Record):
+    null_count: int
+
+
 RecordTypes: list[Record] = [
     SerializationHeaderRecord,
     ClassWithIdRecord,
@@ -188,4 +198,6 @@ RecordTypes: list[Record] = [
     ObjectNullRecord,
     MessageEndRecord,
     BinaryLibraryRecord,
+    ObjectNullMultiple256Record,
+    ObjectNullMultipleRecord,
 ]
